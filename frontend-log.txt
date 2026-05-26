@@ -1,0 +1,39 @@
+
+> personal-dashboard-frontend@1.0.0 dev
+> vite
+
+
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m220[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m1:16:43 pm[22m [33m[1m[vite][22m[39m [33mwarning: [33mDuplicate "style" attribute in JSX element[33m
+79 |          }
+80 |          style={activeTab !== tab.id ? { color: 'rgba(255,255,255,0.4)' } : undefined}
+81 |          style={activeTab === tab.id ? { background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.15)' } : {}}>
+   |          ^
+82 |              {tab.label}
+83 |            </button>
+[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mE:/samarth/Work/personal-dashboard/frontend/src/pages/SettingsPage.jsx[39m
+[2m1:28:06 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m1:29:40 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Shared/DashboardLayout.jsx, /src/index.css[22m
+[2m1:29:43 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Shared/Loading.jsx, /src/index.css[22m
+[2m1:30:36 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Shared/Sidebar.jsx, /src/index.css[22m
+[2m1:30:51 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LoginPage.jsx, /src/index.css[22m
+[2m1:31:06 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/DashboardPage.jsx, /src/index.css[22m
+[2m1:31:09 pm[22m [36m[1m[vite][22m[39m [32m✨ new dependencies optimized: [33m@react-three/fiber, three[32m[39m
+[2m1:31:09 pm[22m [36m[1m[vite][22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m1:31:18 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Dashboard/ServiceSummaryCard.jsx, /src/index.css[22m
+[2m1:31:52 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/SpotifyPage.jsx, /src/index.css[22m
+[2m1:32:15 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/GitHubPage.jsx, /src/index.css[22m
+[2m1:32:28 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/GmailPage.jsx, /src/index.css[22m
+[2m1:35:01 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LetterboxdPage.jsx, /src/index.css[22m
+[2m1:35:37 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/SteamPage.jsx, /src/index.css[22m
+[2m1:36:22 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/RiotPage.jsx, /src/index.css[22m
+[2m1:36:52 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/SettingsPage.jsx, /src/index.css[22m
+[2m1:37:33 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Settings/DataSources.jsx, /src/index.css[22m
+[2m1:37:51 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Settings/ApiKeys.jsx, /src/index.css[22m
+[2m1:38:02 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Settings/Profile.jsx, /src/index.css[22m
+[2m1:38:13 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Dashboard/Overview.jsx, /src/index.css[22m
