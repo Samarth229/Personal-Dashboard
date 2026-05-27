@@ -20,10 +20,8 @@ const env = {
   JWT_EXPIRE: process.env.JWT_EXPIRE || '15m',
   JWT_REFRESH_EXPIRE: process.env.JWT_REFRESH_EXPIRE || '7d',
 
-  RESEND_API_KEY: process.env.RESEND_API_KEY,
-  EMAIL_USER: process.env.EMAIL_USER,
-  EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
-  EMAIL_SERVICE: process.env.EMAIL_SERVICE || 'gmail',
+  BREVO_SMTP_USER: process.env.BREVO_SMTP_USER,
+  BREVO_SMTP_PASS: process.env.BREVO_SMTP_PASS,
 
   SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
   SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,

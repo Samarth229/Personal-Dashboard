@@ -1,17 +1,27 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 const env = require('../config/env');
 const logger = require('../utils/logger');
 
 const sendOTPEmail = async (email, otp) => {
-  if (!env.RESEND_API_KEY) {
+  // Dev mode — no SMTP configured
+  if (!env.BREVO_SMTP_USER || !env.BREVO_SMTP_PASS) {
     logger.warn(`[DEV MODE] OTP for ${email}: ${otp}`);
     return false;
   }
 
   try {
-    const resend = new Resend(env.RESEND_API_KEY);
-    await resend.emails.send({
-      from: 'Personal Dashboard <onboarding@resend.dev>',
+    const transporter = nodemailer.createTransport({
+      host: 'smtp-relay.brevo.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: env.BREVO_SMTP_USER, // your Brevo login email
+        pass: env.BREVO_SMTP_PASS, // Brevo SMTP key (not your account password)
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"Personal Dashboard" <${env.BREVO_SMTP_USER}>`,
       to: email,
       subject: 'Your Login Code',
       html: `
@@ -23,6 +33,7 @@ const sendOTPEmail = async (email, otp) => {
         </div>
       `,
     });
+
     logger.info(`OTP email sent to ${email}`);
     return true;
   } catch (err) {
