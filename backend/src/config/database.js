@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const logger = require('../utils/logger');
 
-const DB_PATH = path.join(__dirname, '../../data/dashboard.db');
+const DB_PATH = process.env.DATABASE_PATH || path.join(__dirname, '../../data/dashboard.db');
 
 // Ensure data directory exists
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
