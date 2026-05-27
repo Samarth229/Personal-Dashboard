@@ -1,20 +1,24 @@
 # Personal Dashboard
 
-A self-hosted personal dashboard that aggregates your Spotify, GitHub, Gmail, Steam, Riot Games, and Letterboxd data in one place. Sign in with Google, connect your services, and get a live overview of everything you care about.
+A self-hosted personal hub that pulls your Spotify, GitHub, Gmail, Steam, Riot Games, and Letterboxd data into one clean dashboard. Sign in with Google, connect your services, and see everything in one place.
 
 ---
 
 ## Features
 
-- **Google OAuth** — one-click sign-in, no passwords
-- **Spotify** — top artists, top tracks, recently played
-- **GitHub** — repos, commits, contribution activity
-- **Gmail** — unread count and recent emails
-- **Steam** — library, playtime, recently played games
-- **Riot Games** — summoner stats and match history
-- **Letterboxd** — recent films and ratings
-- **Dashboard** — animated floating cards with live data from all connected sources
-- **Settings** — manage connected accounts, update profile, reconnect or change any service
+| Service | What you get |
+|---|---|
+| **Spotify** | Top artists, top tracks, recently played |
+| **GitHub** | Repos, commits, contribution graph |
+| **Gmail** | Unread count, recent emails |
+| **Steam** | Game library, playtime, recently played |
+| **Riot Games** | Summoner stats, rank, match history |
+| **Letterboxd** | Recent films and ratings (RSS-based) |
+
+- 🔐 **Google OAuth login** — one-click sign-in, no passwords stored
+- 📧 **OTP verification** for new accounts via email
+- 🌙 **Dark glass UI** with animated Three.js background
+- ⚙️ **Settings page** — connect, reconnect, or disconnect any service
 
 ---
 
@@ -24,24 +28,25 @@ A self-hosted personal dashboard that aggregates your Spotify, GitHub, Gmail, St
 |---|---|
 | Frontend | React 18, Vite, Three.js (`@react-three/fiber`) |
 | Backend | Node.js, Express |
-| Database | SQLite (via `better-sqlite3`) |
+| Database | SQLite (`better-sqlite3`) |
 | Auth | Google OAuth 2.0 (backend-driven), JWT |
-| Styling | Inline styles, dark glass UI |
+| Email | Brevo SMTP (OTP delivery) |
+| Deploy | Render (backend) + Vercel (frontend) |
 
 ---
 
-## Getting Started
+## Local Setup
 
 ### Prerequisites
 
 - Node.js 18+
 - A [Google Cloud Console](https://console.cloud.google.com) project with OAuth 2.0 credentials
-- API keys for whichever services you want to connect (Spotify, GitHub, etc.)
+- Optional: API keys for Spotify, GitHub, Steam, Riot
 
-### 1. Clone the repo
+### 1. Clone
 
 ```bash
-git clone https://github.com/your-username/personal-dashboard.git
+git clone https://github.com/Samarth229/personal-dashboard.git
 cd personal-dashboard
 ```
 
@@ -54,57 +59,44 @@ cd ../frontend && npm install
 
 ### 3. Configure environment variables
 
-Copy the example and fill in your values:
-
 ```bash
 cp backend/.env.example backend/.env
 ```
 
-**`backend/.env` — required fields:**
+Fill in your values in `backend/.env`. The minimum to get the app running locally:
 
 ```env
 PORT=5000
 FRONTEND_URL=http://localhost:5173
-JWT_SECRET=your_jwt_secret
+JWT_SECRET=any_long_random_string
+JWT_REFRESH_SECRET=another_long_random_string
 
-# Google OAuth (used for login)
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# Spotify
-SPOTIFY_CLIENT_ID=your_spotify_client_id
-SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
-SPOTIFY_REDIRECT_URI=http://localhost:5000/api/spotify/callback
-
-# GitHub
-GITHUB_CLIENT_ID=your_github_client_id
-GITHUB_CLIENT_SECRET=your_github_client_secret
-
-# Gmail (uses same Google OAuth credentials)
-GMAIL_REDIRECT_URI=http://localhost:5000/api/gmail/callback
 ```
 
-**`frontend/.env`:**
+Create `frontend/.env`:
 
 ```env
 VITE_GOOGLE_CLIENT_ID=your_google_client_id
+VITE_BACKEND_URL=http://localhost:5000
 ```
 
-### 4. Google Cloud Console setup
+### 4. Google Cloud Console
 
-In your OAuth 2.0 Client, add the following **Authorized redirect URI**:
+In your OAuth 2.0 client, add this **Authorized Redirect URI**:
 
 ```
 http://localhost:5000/api/auth/google/login-callback
 ```
 
-> This only needs to be set once — it points to the backend and never changes regardless of frontend port.
+> The login flow is backend-driven — only the backend redirect URI needs to be registered, not the frontend origin.
 
 ### 5. Run
 
 ```bash
 # Terminal 1 — backend
-cd backend && node src/server.js
+cd backend && npm run dev
 
 # Terminal 2 — frontend
 cd frontend && npm run dev
@@ -114,26 +106,70 @@ Open [http://localhost:5173](http://localhost:5173).
 
 ---
 
+## Deployment (Render + Vercel)
+
+### Backend → Render
+
+1. New Web Service → connect your GitHub repo
+2. **Root Directory:** `backend`
+3. **Build Command:** `npm install`
+4. **Start Command:** `node src/server.js`
+5. Add environment variables (all from `.env.example`), plus:
+   - `BACKEND_URL` = your Render URL (e.g. `https://your-app.onrender.com`)
+   - `FRONTEND_URL` = your Vercel URL
+
+### Frontend → Vercel
+
+1. New Project → connect your GitHub repo
+2. **Root Directory:** `frontend`
+3. **Framework Preset:** Vite
+4. Add environment variables:
+   - `VITE_GOOGLE_CLIENT_ID` = your Google client ID
+   - `VITE_BACKEND_URL` = your Render URL
+
+### After deploying
+
+Update your OAuth redirect URIs in Google Cloud Console, Spotify, and GitHub to use the live URLs.
+
+---
+
+## Email (OTP Delivery)
+
+New user signups require an OTP sent to their email. This uses [Brevo](https://app.brevo.com) (free, 300 emails/day):
+
+1. Create a Brevo account and verify your sender email
+2. Go to **SMTP & API** → generate an SMTP key
+3. Add to your environment:
+   ```env
+   BREVO_SMTP_USER=your_brevo_login_email
+   BREVO_SMTP_PASS=your_brevo_smtp_key
+   ```
+
+> Without these set, OTPs are logged to the console in dev mode but not emailed.
+
+---
+
 ## Project Structure
 
 ```
 personal-dashboard/
 ├── backend/
 │   ├── src/
-│   │   ├── config/        # Env, database
-│   │   ├── middleware/    # Auth, rate limiting
+│   │   ├── config/        # env.js, database.js
+│   │   ├── middleware/    # auth, rate limiting
 │   │   ├── models/        # User, DataSource, DataPoint
-│   │   ├── routes/        # Auth, Spotify, GitHub, Gmail, Steam, Riot, Letterboxd
-│   │   ├── services/      # Per-service fetch + sync engine
-│   │   └── utils/         # JWT, validators, error handler
-│   └── data/              # SQLite database file (gitignored)
+│   │   ├── routes/        # auth, spotify, github, gmail, steam, riot, letterboxd
+│   │   ├── services/      # per-service data fetching, emailService
+│   │   └── utils/         # JWT helpers, logger, error handler
+│   ├── data/              # SQLite .db file (gitignored)
+│   └── .env.example
 └── frontend/
     └── src/
-        ├── components/    # Dashboard, Settings, Three.js scenes
-        ├── context/       # Auth context
+        ├── components/    # Dashboard cards, Settings, Three.js scenes
+        ├── context/       # AuthContext
         ├── hooks/         # useAuth
-        ├── pages/         # Login, Dashboard, Settings, per-service pages
-        └── services/      # API client
+        ├── pages/         # LoginPage, DashboardPage, SettingsPage, service pages
+        └── services/      # axios API client
 ```
 
 ---
