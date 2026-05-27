@@ -15,7 +15,9 @@ router.get('/config', (req, res) => {
 
 // Backend URL used for the Google login callback (always backend port, never changes)
 const googleLoginRedirectUri = () =>
-  `http://localhost:${env.PORT}/api/auth/google/login-callback`;
+  env.BACKEND_URL
+    ? `${env.BACKEND_URL}/api/auth/google/login-callback`
+    : `http://localhost:${env.PORT}/api/auth/google/login-callback`;
 
 // GET /api/auth/google/url — generate Google OAuth URL (no login required)
 router.get('/google/url', (req, res, next) => {

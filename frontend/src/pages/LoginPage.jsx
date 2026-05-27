@@ -48,7 +48,7 @@ const LoginPage = () => {
     if (!clientId) { setError('Google sign-in is not configured.'); return; }
     const params = new URLSearchParams({
       client_id: clientId,
-      redirect_uri: 'http://localhost:5000/api/auth/google/login-callback',
+      redirect_uri: `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/auth/google/login-callback`,
       response_type: 'code',
       scope: 'email profile',
       access_type: 'online',
