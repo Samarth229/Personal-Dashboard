@@ -12,7 +12,8 @@ const GitHubPage    = lazy(() => import('./pages/GitHubPage'));
 const GmailPage     = lazy(() => import('./pages/GmailPage'));
 const LetterboxdPage = lazy(() => import('./pages/LetterboxdPage'));
 const SteamPage     = lazy(() => import('./pages/SteamPage'));
-const RiotPage      = lazy(() => import('./pages/RiotPage'));
+const RiotPage           = lazy(() => import('./pages/RiotPage'));
+const PrivacyPolicyPage  = lazy(() => import('./pages/PrivacyPolicyPage'));
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
@@ -72,6 +73,9 @@ const AnimatedRoutes = () => {
       } />
       <Route path="/riot" element={
         <ProtectedRoute><Suspense fallback={<PageLoader />}><RiotPage /></Suspense></ProtectedRoute>
+      } />
+      <Route path="/privacy" element={
+        <Suspense fallback={<PageLoader />}><PrivacyPolicyPage /></Suspense>
       } />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>

@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "PowerShell(Get-Content \"$env:TEMP\\\\be_err.txt\" | Select-Object -Last 30)"
-    ]
-  }
-}

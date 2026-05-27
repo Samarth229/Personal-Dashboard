@@ -46,9 +46,9 @@ const fetchSummoner = async (region, summonerName, apiKey) => {
   return { ...summoner, gameName: account.gameName, tagLine: account.tagLine, puuid: account.puuid };
 };
 
-const fetchRankedStats = async (region, summonerId, apiKey) => {
+const fetchRankedStats = async (region, puuid, apiKey) => {
   try {
-    return await riotApi(region, `/lol/league/v4/entries/by-summoner/${summonerId}`, apiKey);
+    return await riotApi(region, `/lol/league/v4/entries/by-puuid/${puuid}`, apiKey);
   } catch (err) {
     if (err.response?.status === 403 || err.response?.status === 404) return [];
     throw err;
@@ -101,10 +101,9 @@ const fetchAll = async (userId, summonerName) => {
   if (!apiKey) throw new Error('Riot API key not configured');
 
   const summoner = await fetchSummoner(region, summonerName, apiKey);
-  const { matches: matchHistory, summonerIdFromMatch } = await fetchMatchHistory(region, summoner.puuid, summoner, apiKey);
+  const { matches: matchHistory } = await fetchMatchHistory(region, summoner.puuid, summoner, apiKey);
 
-  const summonerId = summoner.id || summonerIdFromMatch;
-  const rankedStats = summonerId ? await fetchRankedStats(region, summonerId, apiKey) : [];
+  const rankedStats = await fetchRankedStats(region, summoner.puuid, apiKey);
 
   const soloQueue = rankedStats.find((e) => e.queueType === 'RANKED_SOLO_5x5') || null;
   const wins = matchHistory.filter((m) => m.win).length;

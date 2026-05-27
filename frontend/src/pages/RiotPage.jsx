@@ -109,8 +109,7 @@ const RiotPage = () => {
             <span style={{ color: '#ff3b30', fontSize: 18 }}>✕</span>
           </div>
           <p className="font-medium text-white">Riot sync failed</p>
-          <p className="text-xs max-w-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>{syncError || 'Could not fetch Riot data. The API key may have expired or the Riot ID is invalid.'}</p>
-          <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.3)' }}>Riot dev API keys expire every 24 hours — you may need to generate a new one.</p>
+          <p className="text-xs max-w-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>{syncError || 'Could not fetch Riot data. Check that your Riot ID is correct (GameName#TAG).'}</p>
           <button className="btn-primary text-sm mt-2" onClick={() => setShowConnect(true)}>Try again with new Riot ID</button>
         </div>
       ) : isSyncing ? (

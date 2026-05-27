@@ -6,3 +6,5 @@ build/
 *.log
 .cache/
 coverage/
+backend/data/
+.claude/
