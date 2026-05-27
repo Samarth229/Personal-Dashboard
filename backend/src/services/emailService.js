@@ -1,38 +1,17 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const env = require('../config/env');
 const logger = require('../utils/logger');
 
-let transporter;
-
-const getTransporter = () => {
-  if (transporter) return transporter;
-
-  if (!env.EMAIL_USER || !env.EMAIL_PASSWORD) {
-    // Dev mode: log OTPs to console instead of sending email
-    return null;
-  }
-
-  transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: { user: env.EMAIL_USER, pass: env.EMAIL_PASSWORD },
-    tls: { rejectUnauthorized: false },
-  });
-  return transporter;
-};
-
 const sendOTPEmail = async (email, otp) => {
-  const t = getTransporter();
-
-  if (!t) {
+  if (!env.RESEND_API_KEY) {
     logger.warn(`[DEV MODE] OTP for ${email}: ${otp}`);
-    return false; // signals: no email sent, show OTP in browser
+    return false;
   }
 
   try {
-    await t.sendMail({
-      from: `"Personal Dashboard" <${env.EMAIL_USER}>`,
+    const resend = new Resend(env.RESEND_API_KEY);
+    await resend.emails.send({
+      from: 'Personal Dashboard <onboarding@resend.dev>',
       to: email,
       subject: 'Your Login Code',
       html: `
@@ -48,7 +27,6 @@ const sendOTPEmail = async (email, otp) => {
     return true;
   } catch (err) {
     logger.error('Failed to send OTP email:', err.message);
-    logger.warn(`[FALLBACK] OTP for ${email}: ${otp}`);
     return false;
   }
 };

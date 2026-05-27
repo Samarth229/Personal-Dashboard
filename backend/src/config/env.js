@@ -20,6 +20,7 @@ const env = {
   JWT_EXPIRE: process.env.JWT_EXPIRE || '15m',
   JWT_REFRESH_EXPIRE: process.env.JWT_REFRESH_EXPIRE || '7d',
 
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
   EMAIL_USER: process.env.EMAIL_USER,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
   EMAIL_SERVICE: process.env.EMAIL_SERVICE || 'gmail',
