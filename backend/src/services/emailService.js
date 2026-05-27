@@ -13,8 +13,11 @@ const getTransporter = () => {
   }
 
   transporter = nodemailer.createTransport({
-    service: env.EMAIL_SERVICE,
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
     auth: { user: env.EMAIL_USER, pass: env.EMAIL_PASSWORD },
+    tls: { rejectUnauthorized: false },
   });
   return transporter;
 };

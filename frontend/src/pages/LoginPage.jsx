@@ -164,7 +164,7 @@ const LoginPage = () => {
                 <span style={{ color: 'rgba(255,255,255,0.8)' }}>{pendingEmail}</span>
               </p>
 
-              {devOtp && (
+              {devOtp && import.meta.env.DEV && (
                 <div style={{ background: 'rgba(0,113,227,0.15)', border: '1px solid rgba(0,113,227,0.3)', borderRadius: 10, padding: '8px 12px', marginBottom: 16 }}>
                   <p style={{ color: '#60a5fa', fontSize: 12, textAlign: 'center' }}>Dev mode — OTP: <strong>{devOtp}</strong></p>
                 </div>
