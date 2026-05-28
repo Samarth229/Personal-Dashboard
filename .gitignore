@@ -4,6 +4,7 @@ node_modules/
 dist/
 build/
 *.log
+*-log.txt
 .cache/
 coverage/
 backend/data/

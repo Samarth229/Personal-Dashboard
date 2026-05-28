@@ -30,7 +30,7 @@ A self-hosted personal hub that pulls your Spotify, GitHub, Gmail, Steam, Riot G
 | Backend | Node.js, Express |
 | Database | SQLite (`better-sqlite3`) |
 | Auth | Google OAuth 2.0 (backend-driven), JWT |
-| Email | Brevo SMTP (OTP delivery) |
+| Email | SendGrid SMTP (OTP delivery) |
 | Deploy | Render (backend) + Vercel (frontend) |
 
 ---
@@ -135,17 +135,17 @@ Update your OAuth redirect URIs in Google Cloud Console, Spotify, and GitHub to 
 
 ## Email (OTP Delivery)
 
-New user signups require an OTP sent to their email. This uses [Brevo](https://app.brevo.com) (free, 300 emails/day):
+New user signups require an OTP sent to their email. This uses [SendGrid](https://sendgrid.com) (free, 100 emails/day, sends to any recipient):
 
-1. Create a Brevo account and verify your sender email
-2. Go to **SMTP & API** → generate an SMTP key
-3. Add to your environment:
+1. Create a SendGrid account
+2. Go to **Settings → Sender Authentication → Single Sender Verification** → verify your sender email
+3. Go to **Settings → API Keys** → create a key with **Mail Send** permission
+4. Add to your environment:
    ```env
-   BREVO_SMTP_USER=your_brevo_login_email
-   BREVO_SMTP_PASS=your_brevo_smtp_key
+   SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxx
    ```
 
-> Without these set, OTPs are logged to the console in dev mode but not emailed.
+> Without this set, OTPs are logged to the console in dev mode but not emailed.
 
 ---
 
