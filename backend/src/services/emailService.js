@@ -3,25 +3,24 @@ const env = require('../config/env');
 const logger = require('../utils/logger');
 
 const sendOTPEmail = async (email, otp) => {
-  // Dev mode — no SMTP configured
-  if (!env.BREVO_SMTP_USER || !env.BREVO_SMTP_PASS) {
+  if (!env.SENDGRID_API_KEY) {
     logger.warn(`[DEV MODE] OTP for ${email}: ${otp}`);
     return false;
   }
 
   try {
     const transporter = nodemailer.createTransport({
-      host: 'smtp-relay.brevo.com',
+      host: 'smtp.sendgrid.net',
       port: 587,
       secure: false,
       auth: {
-        user: env.BREVO_SMTP_USER, // your Brevo login email
-        pass: env.BREVO_SMTP_PASS, // Brevo SMTP key (not your account password)
+        user: 'apikey',
+        pass: env.SENDGRID_API_KEY,
       },
     });
 
     await transporter.sendMail({
-      from: `"Personal Dashboard" <${env.BREVO_SMTP_USER}>`,
+      from: '"Personal Dashboard" <samarthkadam3411@gmail.com>',
       to: email,
       subject: 'Your Login Code',
       html: `
