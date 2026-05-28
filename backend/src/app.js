@@ -8,6 +8,9 @@ const { authenticate } = require('./middleware/auth');
 
 const app = express();
 
+// Render (and most cloud hosts) sit behind a proxy — trust it so rate limiting works correctly
+app.set('trust proxy', 1);
+
 app.use(helmet());
 app.use(cors({ origin: env.FRONTEND_URL, credentials: true }));
 app.use(express.json());
