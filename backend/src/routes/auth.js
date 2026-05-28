@@ -143,6 +143,24 @@ router.post('/google/verify', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// POST /api/auth/send-otp — unified: works for both new and existing users
+router.post('/send-otp', otpLimiter, async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (!validateEmail(email)) return next(new AppError('Invalid email', 400));
+    const User = require('../models/User');
+    const existing = await User.findByEmail(email.toLowerCase());
+    if (existing && !existing.is_active) return next(new AppError('Account is disabled', 403));
+    const devOtp = await authService.createOtpForEmail(email.toLowerCase());
+    res.json({
+      success: true,
+      isNewUser: !existing,
+      message: devOtp ? 'OTP generated (dev mode)' : 'OTP sent to your email',
+      dev_otp: devOtp || undefined,
+    });
+  } catch (err) { next(err); }
+});
+
 // POST /api/auth/signup — send OTP
 router.post('/signup', otpLimiter, async (req, res, next) => {
   try {
