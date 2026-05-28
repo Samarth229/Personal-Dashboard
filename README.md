@@ -1,6 +1,8 @@
 # Personal Dashboard
 
-A self-hosted personal hub that pulls your Spotify, GitHub, Gmail, Steam, Riot Games, and Letterboxd data into one clean dashboard. Sign in with Google, connect your services, and see everything in one place.
+**Live:** [personal-dashboard-mauve-two.vercel.app](https://personal-dashboard-mauve-two.vercel.app/login)
+
+A self-hosted personal hub that pulls your Spotify, GitHub, Gmail, Steam, Riot Games, and Letterboxd data into one clean dashboard. Enter your email, verify with a one-time code, connect your services, and see everything in one place.
 
 ---
 
@@ -30,7 +32,7 @@ A self-hosted personal hub that pulls your Spotify, GitHub, Gmail, Steam, Riot G
 | Backend | Node.js, Express |
 | Database | SQLite (`better-sqlite3`) |
 | Auth | Google OAuth 2.0 (backend-driven), JWT |
-| Email | SendGrid SMTP (OTP delivery) |
+| Email | SendGrid HTTP API (OTP delivery) |
 | Deploy | Render (backend) + Vercel (frontend) |
 
 ---
@@ -137,14 +139,15 @@ Update your OAuth redirect URIs in Google Cloud Console, Spotify, and GitHub to 
 
 New user signups require an OTP sent to their email. This uses [SendGrid](https://sendgrid.com) (free, 100 emails/day, sends to any recipient):
 
-1. Create a SendGrid account
+1. Create a free account at [sendgrid.com](https://sendgrid.com)
 2. Go to **Settings → Sender Authentication → Single Sender Verification** → verify your sender email
-3. Go to **Settings → API Keys** → create a key with **Mail Send** permission
+3. Go to **Settings → API Keys** → create a key with **Mail Send** permission only
 4. Add to your environment:
    ```env
    SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxx
    ```
 
+> Uses the SendGrid HTTP API (not SMTP) — works on Render and all cloud hosts.
 > Without this set, OTPs are logged to the console in dev mode but not emailed.
 
 ---
