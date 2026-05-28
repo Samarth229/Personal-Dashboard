@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 const env = require('../config/env');
 const logger = require('../utils/logger');
 
@@ -9,18 +9,9 @@ const sendOTPEmail = async (email, otp) => {
   }
 
   try {
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.sendgrid.net',
-      port: 587,
-      secure: false,
-      auth: {
-        user: 'apikey',
-        pass: env.SENDGRID_API_KEY,
-      },
-    });
-
-    await transporter.sendMail({
-      from: '"Personal Dashboard" <samarthkadam3411@gmail.com>',
+    sgMail.setApiKey(env.SENDGRID_API_KEY);
+    await sgMail.send({
+      from: { name: 'Personal Dashboard', email: 'samarthkadam3411@gmail.com' },
       to: email,
       subject: 'Your Login Code',
       html: `
@@ -32,11 +23,11 @@ const sendOTPEmail = async (email, otp) => {
         </div>
       `,
     });
-
     logger.info(`OTP email sent to ${email}`);
     return true;
   } catch (err) {
-    logger.error('Failed to send OTP email: ' + (err.message || err.responseCode || JSON.stringify(err)));
+    const detail = err.response?.body?.errors?.[0]?.message || err.message || 'unknown error';
+    logger.error('Failed to send OTP email: ' + detail);
     return false;
   }
 };
